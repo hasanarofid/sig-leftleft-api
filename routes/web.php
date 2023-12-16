@@ -15,7 +15,7 @@ Route::get('/', 'OutletMapController@index');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'OutletMapController@index')->name('outlet_map.index');
 
 /*
  * Outlets Routes

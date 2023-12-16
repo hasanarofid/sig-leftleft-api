@@ -52,6 +52,17 @@ class OutletController extends Controller
             'longitude' => 'nullable|required_with:latitude|max:15',
         ]);
         $newOutlet['creator_id'] = auth()->id();
+        $newOutlet['provinsi_id'] = $request->provinsi_id;
+        $newOutlet['kabupaten_id'] = $request->kabupaten_id;
+        $newOutlet['kecamatan_id'] = $request->kecamatan_id;
+        $newOutlet['kelurahan_id'] = $request->kelurahan_id;
+        $newOutlet['deskripsi'] = $request->deskripsi;
+        $newOutlet['harga'] = $request->harga;
+
+        $imageName = time().'.'.$request->gambar->extension();
+        $request->gambar->move(public_path('toko'), $imageName);
+        $newOutlet['gambar'] = $imageName;
+        // dd($newOutlet);
 
         $outlet = Outlet::create($newOutlet);
 
@@ -66,6 +77,7 @@ class OutletController extends Controller
      */
     public function show(Outlet $outlet)
     {
+        // dd($outlet->gambar);
         return view('outlets.show', compact('outlet'));
     }
 
@@ -99,6 +111,21 @@ class OutletController extends Controller
             'latitude'  => 'nullable|required_with:longitude|max:15',
             'longitude' => 'nullable|required_with:latitude|max:15',
         ]);
+        $newOutlet['creator_id'] = auth()->id();
+        $newOutlet['provinsi_id'] = $request->provinsi_id;
+        $newOutlet['kabupaten_id'] = $request->kabupaten_id;
+        $newOutlet['kecamatan_id'] = $request->kecamatan_id;
+        $newOutlet['kelurahan_id'] = $request->kelurahan_id;
+        $newOutlet['deskripsi'] = $request->deskripsi;
+        $newOutlet['harga'] = $request->harga;
+
+        if(!empty($request->gambar)){
+            $imageName = time().'.'.$request->gambar->extension();
+            $request->gambar->move(public_path('toko'), $imageName);
+            $newOutlet['gambar'] = $imageName;
+    
+        }
+
         $outlet->update($outletData);
 
         return redirect()->route('outlets.show', $outlet);

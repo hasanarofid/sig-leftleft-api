@@ -60,11 +60,24 @@
 <script>
     var map = L.map('mapid').setView([{{ $outlet->latitude }}, {{ $outlet->longitude }}], {{ config('leaflet.detail_zoom_level') }});
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
 
-    L.marker([{{ $outlet->latitude }}, {{ $outlet->longitude }}]).addTo(map)
-        .bindPopup('{!! $outlet->map_popup_content !!}');
+var popupContent = '<strong>{{ $outlet->name }}</strong><br>' +
+    '{{ $outlet->address }}<br>' +
+    '<img src="{{ asset('toko/' . $outlet->gambar) }}" alt="Outlet Image" width="100">';
+
+L.marker([{{ $outlet->latitude }}, {{ $outlet->longitude }}])
+    .addTo(map)
+    .bindPopup(popupContent);
+    // var map = L.map('mapid').setView([{{ $outlet->latitude }}, {{ $outlet->longitude }}], {{ config('leaflet.detail_zoom_level') }});
+
+    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    // }).addTo(map);
+
+    // L.marker([{{ $outlet->latitude }}, {{ $outlet->longitude }}]).addTo(map)
+    //     .bindPopup('{!! $outlet->map_popup_content !!}');
 </script>
 @endpush

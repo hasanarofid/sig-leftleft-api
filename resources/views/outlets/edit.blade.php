@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-md-10">
         @if (request('action') == 'delete' && $outlet)
         @can('delete', $outlet)
             <div class="card">
@@ -35,7 +35,7 @@
         @else
         <div class="card">
             <div class="card-header">{{ __('outlet.edit') }}</div>
-            <form method="POST" action="{{ route('outlets.update', $outlet) }}" accept-charset="UTF-8">
+            <form method="POST" action="{{ route('outlets.update', $outlet) }}" accept-charset="UTF-8" enctype="multipart/form-data">
                 {{ csrf_field() }} {{ method_field('patch') }}
                 <div class="card-body">
                     <div class="form-group">
@@ -44,9 +44,39 @@
                         {!! $errors->first('name', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                     </div>
                     <div class="form-group">
+                        <label for="deskripsi" class="control-label">Deskripsi</label>
+                        <textarea id="deskripsi" class="form-control{{ $errors->has('deskripsi') ? ' is-invalid' : '' }}" name="deskripsi" rows="4">{{ old('deskripsi',$outlet->deskripsi) }}</textarea>
+                        {!! $errors->first('deskripsi', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
+
+                    
+
+                    <div class="form-group">
                         <label for="address" class="control-label">{{ __('outlet.address') }}</label>
                         <textarea id="address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" rows="4">{{ old('address', $outlet->address) }}</textarea>
                         {!! $errors->first('address', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name" class="control-label">Gambar</label>
+                                <input type="file" name="gambar" id="gambar" class="form-control">
+                                </select>
+                            </div>
+                            
+        
+                        </div>
+
+
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="name" class="control-label">Harga</label>
+                                <input value="{{ $outlet->harga }}" type="number" name="harga" id="harga" class="form-control">
+                            </div>
+                        </div>
+
+                       
                     </div>
                     <div class="row">
                         <div class="col-md-6">

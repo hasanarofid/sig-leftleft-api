@@ -7,7 +7,7 @@
     <div class="col-md-10">
         <div class="card">
             <div class="card-header">Buat Toko Sepatu Baru</div>
-            <form method="POST" action="{{ route('outlets.store') }}" accept-charset="UTF-8">
+            <form method="POST" action="{{ route('outlets.store') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="card-body">
                     <div class="form-group">

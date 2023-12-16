@@ -1,8 +1,32 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="card">
     <div class="card-body" id="mapid"></div>
+
+
+</div>
+<br>
+<div class="row">
+        <div class="col-md-12 text-center mb-4">
+            <h4>List Toko</h4>
+        </div>
+    </div>
+<div class="row">
+    @foreach($list as $outlet)
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{ asset('toko/') . '/' . $outlet->gambar }}" class="card-img-top" alt="Outlet Image">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $outlet->name }}</h5>
+                    <p class="card-text">{{ $outlet->address }}</p>
+                    <p class="card-text">Harga: {{ $outlet->harga }}</p>
+                    <a href="{{ route('outlets.show', $outlet->id) }}" class="btn btn-primary">Show</a>
+                </div>
+            </div>
+        </div>
+    @endforeach
 </div>
 @endsection
 
@@ -36,9 +60,19 @@
     .then(function (response) {
         var marker = L.geoJSON(response.data, {
             pointToLayer: function(geoJsonPoint, latlng) {
-                return L.marker(latlng).bindPopup(function (layer) {
-                    return layer.feature.properties.map_popup_content;
-                });
+                var properties = geoJsonPoint.properties;
+                
+                // Build the popup content, including the image
+                var popupContent = '<strong>' + properties.name + '</strong><br>' +
+                    properties.address + '<br>' +
+                    '<img src="{{ asset('toko/') }}/' + properties.gambar + '" alt="Outlet Image" width="100">';
+
+                // Create the marker with the popup
+                return L.marker(latlng).bindPopup(popupContent);
+
+                // return L.marker(latlng).bindPopup(function (layer) {
+                //     return layer.feature.properties.map_popup_content;
+                // });
             }
         });
         markers.addLayer(marker);
