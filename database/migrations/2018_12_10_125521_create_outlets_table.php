@@ -17,6 +17,13 @@ class CreateOutletsTable extends Migration
             $table->increments('id');
             $table->string('name', 60);
             $table->string('address')->nullable();
+            $table->string('gambar')->nullable();
+            $table->string('harga')->nullable();
+            $table->string('deskripsi')->nullable();
+            $table->integer('provinsi_id')->nullable(); 
+            $table->integer('kabupaten_id')->nullable(); 
+            $table->integer('kecamatan_id')->nullable(); 
+            $table->integer('kelurahan_id')->nullable(); 
             $table->string('latitude', 15)->nullable();
             $table->string('longitude', 15)->nullable();
             $table->unsignedInteger('creator_id');

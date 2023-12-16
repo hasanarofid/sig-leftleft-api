@@ -4,21 +4,97 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-md-10">
         <div class="card">
-            <div class="card-header">{{ __('outlet.create') }}</div>
+            <div class="card-header">Buat Toko Sepatu Baru</div>
             <form method="POST" action="{{ route('outlets.store') }}" accept-charset="UTF-8">
                 {{ csrf_field() }}
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="name" class="control-label">{{ __('outlet.name') }}</label>
+                        <label for="name" class="control-label">Nama Toko</label>
                         <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required>
                         {!! $errors->first('name', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                     </div>
                     <div class="form-group">
-                        <label for="address" class="control-label">{{ __('outlet.address') }}</label>
+                        <label for="deskripsi" class="control-label">Deskripsi</label>
+                        <textarea id="deskripsi" class="form-control{{ $errors->has('deskripsi') ? ' is-invalid' : '' }}" name="deskripsi" rows="4">{{ old('deskripsi') }}</textarea>
+                        {!! $errors->first('deskripsi', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="name" class="control-label">Provinsi</label>
+                                    <select name="provinsi_id" id="provinsi_id" class="form-control" onchange="pilihKabupaten(this)">
+                                    </select>
+                                </div>
+                                
+            
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="name" class="control-label">Kabupaten</label>
+                                    <select name="kabupaten_id" id="kabupaten_id" class="form-control" onchange="pilihKecamatan(this)">
+            
+                                    </select>
+                                </div>
+                                
+            
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="name" class="control-label">Kecamatan</label>
+                                    <select name="kecamatan_id" id="kecamatan_id" class="form-control" onchange="pilihDesa(this)">
+            
+                                    </select>
+                                </div>
+                                
+            
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="name" class="control-label">Desa</label>
+                                    <select name="kelurahan_id" id="kelurahan_id" class="form-control" >
+            
+                                    </select>
+                                </div>
+                                
+            
+                            </div>
+                        </div>
+
+
+                    <div class="form-group">
+                        <label for="address" class="control-label">Alamat</label>
                         <textarea id="address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" rows="4">{{ old('address') }}</textarea>
                         {!! $errors->first('address', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
+
+                 
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name" class="control-label">Gambar</label>
+                                <input type="file" name="gambar" id="gambar" class="form-control">
+                                </select>
+                            </div>
+                            
+        
+                        </div>
+
+
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="name" class="control-label">Harga</label>
+                                <input type="number" name="harga" id="harga" class="form-control">
+                            </div>
+                        </div>
+
+                       
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -92,5 +168,136 @@
     }
     $('#latitude').on('input', updateMarkerByInputs);
     $('#longitude').on('input', updateMarkerByInputs);
+
+
+    $(document).ready(function() {
+        getProvinsi();
+            // Use jQuery to make an AJAX GET request to the API endpoint
+           
+        });
+
+        function getProvinsi(){
+            var apiUrl = "{{ route('get-provinsi') }}";
+            $.ajax({
+                url: apiUrl,
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    // Handle the successful response
+                    
+
+                    // Display the data in the container
+                    // Update your view with the received data, for example:
+                    var select = $('#provinsi_id');
+                    select.empty(); // Clear previous options
+                    select.append('<option value="">.:PILIH:.</option>');
+                    // Assuming the array is nested under the key 'response'
+                    $.each(response, function(key, value) {
+                        select.append('<option value="' + value.id + '">' + value.provinsi + '</option>');
+                    });
+                },
+                error: function(error) {
+                    // Handle the error
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        function pilihKabupaten(obj){
+            var provinsi_id = $(obj).val();
+            var apiUrl = "{{ route('get-kabupaten') }}";
+            $.ajax({
+                url: apiUrl,
+                method: 'GET',
+                data : {
+                    provinsi_id : provinsi_id
+                },
+                dataType: 'json',
+                success: function(response) {
+                    // Handle the successful response
+                    
+
+                    // Display the data in the container
+                    // Update your view with the received data, for example:
+                    var select = $('#kabupaten_id');
+                    select.empty(); // Clear previous options
+                    select.append('<option value="">.:Pilih Kabupaten:.</option>');
+                    // Assuming the array is nested under the key 'response'
+                    $.each(response, function(key, value) {
+                        select.append('<option value="' + value.id + '">' + value.value + '</option>');
+                    });
+                },
+                error: function(error) {
+                    // Handle the error
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        function pilihKecamatan(obj){
+            var kabupaten_id = $(obj).val();
+            var apiUrl = "{{ route('get-kecamatan') }}";
+            $.ajax({
+                url: apiUrl,
+                method: 'GET',
+                data : {
+                    kabupaten_id : kabupaten_id
+                },
+                dataType: 'json',
+                success: function(response) {
+                    // Handle the successful response
+                    
+
+                    // Display the data in the container
+                    // Update your view with the received data, for example:
+                    var select = $('#kecamatan_id');
+                    select.empty(); // Clear previous options
+                    select.append('<option value="">.:Pilih Kecamatan:.</option>');
+                    // Assuming the array is nested under the key 'response'
+                    $.each(response, function(key, value) {
+                        select.append('<option value="' + value.id + '">' + value.value + '</option>');
+                    });
+                },
+                error: function(error) {
+                    // Handle the error
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        function pilihDesa(obj){
+            var kecamatan_id = $(obj).val();
+            var apiUrl = "{{ route('get-desa') }}";
+            $.ajax({
+                url: apiUrl,
+                method: 'GET',
+                data : {
+                    kecamatan_id : kecamatan_id
+                },
+                dataType: 'json',
+                success: function(response) {
+                    // Handle the successful response
+                    
+
+                    // Display the data in the container
+                    // Update your view with the received data, for example:
+                    var select = $('#kelurahan_id');
+                    select.empty(); // Clear previous options
+                    select.append('<option value="">.:Pilih Desa:.</option>');
+                    // Assuming the array is nested under the key 'response'
+                    $.each(response, function(key, value) {
+                        select.append('<option value="' + value.id + '">' + value.value + '</option>');
+                    });
+                },
+                error: function(error) {
+                    // Handle the error
+                    console.error('Error:', error);
+                }
+            });
+        }
+        
+
+    
+
 </script>
 @endpush

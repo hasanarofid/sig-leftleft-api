@@ -22,4 +22,9 @@ Route::get('/home', 'HomeController@index')->name('home');
  */
 Route::get('/our_outlets', 'OutletMapController@index')->name('outlet_map.index');
 Route::resource('outlets', 'OutletController');
-Route::resource('region', 'RegionController');
+
+
+Route::get('/get-provinsi', 'RegionController@provinsi')->name('get-provinsi');
+Route::get('/get-kabupaten', 'RegionController@kabupaten')->name('get-kabupaten');
+Route::get('/get-kecamatan', 'RegionController@kecamatan')->name('get-kecamatan');
+Route::get('/get-desa', 'RegionController@desa')->name('get-desa');

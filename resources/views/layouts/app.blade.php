@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>SIG API LEAFTLET</title>
+    <title>SIG TOKO SEPATU</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -22,7 +22,7 @@
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    SIG API LEAFTLET
+                    SIG TOKO SEPATU
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -52,9 +52,9 @@
                                 <a class="nav-link" href="{{ route('outlets.index') }}">{{ __('outlet.list') }}</a>
                             </li>
 
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" href="{{ route('region.index') }}">Region</a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -81,7 +81,7 @@
         <main class="py-4 container">
             @yield('content')
         </main>
-        @include('layouts.partials.footer')
+        {{-- @include('layouts.partials.footer') --}}
     </div>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>

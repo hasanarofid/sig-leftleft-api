@@ -17,13 +17,13 @@ class RegionController extends Controller
     {
         $apiToken = Session::get('api_token');
         // dd($apiToken);
-        // $response = Http::withHeaders([
-        //     'Authorization' => 'Bearer ' . $apiToken,
-        // ])->get('https://gisapis.manpits.xyz/api/mregion');
-
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $apiToken,
-        ])->get('https://gisapis.manpits.xyz/api/meksisting');
+        ])->get('https://gisapis.manpits.xyz/api/mregion');
+
+        // $response = Http::withHeaders([
+        //     'Authorization' => 'Bearer ' . $apiToken,
+        // ])->get('https://gisapis.manpits.xyz/api/meksisting');
 
         if ($response->successful()) {
             // Decode the JSON response
@@ -39,6 +39,49 @@ class RegionController extends Controller
         }
 
         return view('region.index',compact('region'));
+    }
+
+    public function provinsi(Request $request){
+        $apiToken = Session::get('api_token');
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $apiToken,
+        ])->get('https://gisapis.manpits.xyz/api/mregion');
+
+        $responseData = $response->json();
+        return response()->json($responseData['provinsi']);
+    }
+
+    public function kabupaten(Request $request){
+        $provinsiId = $request->provinsi_id;
+        $apiToken = Session::get('api_token');
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $apiToken,
+        ])->get('https://gisapis.manpits.xyz/api/kabupaten/' . $provinsiId);
+
+        $responseData = $response->json();
+        return response()->json($responseData['kabupaten']);
+    }
+
+    public function kecamatan(Request $request){
+        $kabupaten_id = $request->kabupaten_id;
+        $apiToken = Session::get('api_token');
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $apiToken,
+        ])->get('https://gisapis.manpits.xyz/api/kecamatan/' . $kabupaten_id);
+
+        $responseData = $response->json();
+        return response()->json($responseData['kecamatan']);
+    }
+
+    public function desa(Request $request){
+        $kecamatan_id = $request->kecamatan_id;
+        $apiToken = Session::get('api_token');
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $apiToken,
+        ])->get('https://gisapis.manpits.xyz/api/desa/' . $kecamatan_id);
+
+        $responseData = $response->json();
+        return response()->json($responseData['desa']);
     }
 
     /**
