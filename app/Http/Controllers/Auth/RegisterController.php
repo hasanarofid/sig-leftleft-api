@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-
+use Illuminate\Support\Facades\Http;
 class RegisterController extends Controller
 {
     /*
@@ -63,6 +63,17 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        // dd($data);
+
+        $response = Http::post('https://gisapis.manpits.xyz/api/register', [
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => $data['password'],
+        ]);
+        $responseData = $response->json();
+        // dd($responseData);
+
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],

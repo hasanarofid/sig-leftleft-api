@@ -22,3 +22,4 @@ Route::get('/home', 'HomeController@index')->name('home');
  */
 Route::get('/our_outlets', 'OutletMapController@index')->name('outlet_map.index');
 Route::resource('outlets', 'OutletController');
+Route::resource('region', 'RegionController');
