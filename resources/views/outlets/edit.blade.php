@@ -34,6 +34,7 @@
         @endcan
         @else
         <div class="card">
+            {{-- {{ dd($outlet) }} --}}
             <div class="card-header">{{ __('outlet.edit') }}</div>
             <form method="POST" action="{{ route('outlets.update', $outlet) }}" accept-charset="UTF-8" enctype="multipart/form-data">
                 {{ csrf_field() }} {{ method_field('patch') }}
@@ -45,7 +46,7 @@
                     </div>
                     
 
-                        <div class="row" style="display: none">
+                        <div class="row" >
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="name" class="control-label">Provinsi</label>
@@ -99,7 +100,7 @@
 
                     <div class="form-group">
                         <label for="deskripsi" class="control-label">Price Range</label>
-                        <input value="{{ $outlet->maxPrice }}" type="text" id="priceRangeInput" class="form-control" readonly>
+                        <input value="{{ $outlet->harga_range }}" type="text" id="priceRangeInput" class="form-control" readonly>
                         <input type="hidden" id="minPrice" name="minPrice" value="100000">
                         <input type="hidden" id="maxPrice" name="maxPrice" value="{{ $outlet->maxPrice }}">
                     
@@ -113,6 +114,8 @@
                             <label for="name" class="control-label">Gambar Villa</label>
                             <input type="file" name="gambar" id="gambar" class="form-control">
                             </select>
+                            <p>Pilih Gambar lagi untuk ganti</p>
+                            <img src="{{ asset('villa/' . $outlet->gambar) }}" alt="Outlet Image" width="100">
                         </div>
                         
     
@@ -121,11 +124,12 @@
                         <label for="deskripsi" class="control-label">Categori</label>
                         @php
                             $categori = ['Farm','Beachfront','Mansions','Tiny House','Luxes','Amazing Views','Natural','Tropis'];
+                            $selectedCategories = explode(',', $outlet->categori);
                         @endphp
 
                         @foreach($categori as $key => $category)
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="category{{ $key }}" name="categori[]" value="{{ $category }}">
+                            <input class="form-check-input" type="checkbox" id="category{{ $key }}" name="categori[]" value="{{ $category }}" @if(in_array($category, $selectedCategories)) checked @endif>
                             <label class="form-check-label" for="category{{ $key }}">{{ $category }}</label>
                         </div>
                         @endforeach
@@ -135,41 +139,45 @@
                     
                     <div class="form-group">
                         <label for="deskripsi" class="control-label">Deskripsi</label>
-                        <textarea id="deskripsi" class="form-control{{ $errors->has('deskripsi') ? ' is-invalid' : '' }}" name="deskripsi" rows="4">{{ old('deskripsi') }}</textarea>
+                        <textarea id="deskripsi" class="form-control{{ $errors->has('deskripsi') ? ' is-invalid' : '' }}" name="deskripsi" rows="4">{{ old('deskripsi',$outlet->deskripsi) }}</textarea>
                         {!! $errors->first('deskripsi', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                     </div>
 
                     <div class="form-group">
                         <label for="deskripsi" class="control-label">House Rules</label>
                         @php
-                            $rules = ['Gatherings allowed','Smoking allowed','Pets allowed',
-                                        'Suitable for infants (under 2 years)',
-                                        'Children friendly home (2-12 years)'
-                                    ];
-                        @endphp
-
-                        @foreach($rules as $key => $rule)
+                        $rules = [
+                            'Gatherings allowed',
+                            'Smoking allowed',
+                            'Pets allowed',
+                            'Suitable for infants (under 2 years)',
+                            'Children friendly home (2-12 years)'
+                        ];
+                        $selectedRules = explode(',', $outlet->rules);
+                    @endphp
+                    
+                    @foreach($rules as $key => $rule)
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="rule{{ $key }}" name="rules[]" value="{{ $rule }}">
+                            <input class="form-check-input" type="checkbox" id="rule{{ $key }}" name="rules[]" value="{{ $rule }}" @if(in_array($rule, $selectedRules)) checked @endif>
                             <label class="form-check-label" for="rule{{ $key }}">{{ $rule }}</label>
                         </div>
-                        @endforeach
+                    @endforeach
 
                     </div>
 
                     <div class="form-group">
                         <label for="deskripsi" class="control-label">Fasilitas</label>
                         @php
-                            $fasilitass = ['TV','Parking','Fan','Swimming Pool','Wi-fi'
-                                    ];
-                        @endphp
-
-                        @foreach($fasilitass as $key => $fasilitas)
+                        $fasilitass = ['TV', 'Parking', 'Fan', 'Swimming Pool', 'Wi-fi'];
+                        $fasi = explode(',', $outlet->fasilitas);
+                    @endphp
+                    
+                    @foreach($fasilitass as $key => $fasilitas)
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="fasilitas{{ $key }}" name="fasilitas[]" value="{{ $fasilitas }}">
+                            <input class="form-check-input" type="checkbox" id="fasilitas{{ $key }}" name="fasilitas[]" value="{{ $fasilitas }}" @if(in_array($fasilitas, $fasi)) checked @endif>
                             <label class="form-check-label" for="fasilitas{{ $key }}">{{ $fasilitas }}</label>
                         </div>
-                        @endforeach
+                    @endforeach
 
                     </div>
                     <h5>Room Information</h5>
@@ -177,7 +185,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="name" class="control-label">Room Name</label>
-                                <input type="tex" name="room" id="room" class="form-control">
+                                <input type="tex" name="room" id="room" class="form-control" value="{{ $outlet->room  }}">
                                 </select>
                             </div>
                         </div>
@@ -185,7 +193,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="name" class="control-label">Bed</label>
-                                <input type="tex" name="bed" id="bed" class="form-control">
+                                <input type="tex" name="bed" id="bed" class="form-control" value="{{ $outlet->bed  }}">
                                 </select>
                             </div>
                         </div>
@@ -193,7 +201,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="name" class="control-label">Bathroom</label>
-                                <input type="tex" name="bathroom" id="bathroom" class="form-control">
+                                <input type="tex" name="bathroom" id="bathroom" class="form-control" value="{{ $outlet->bathroom  }}">
                                 </select>
                             </div>
                         </div>
@@ -209,6 +217,9 @@
                                 <label for="name" class="control-label">Gambar Room</label>
                                 <input type="file" name="roompic" id="roompic" class="form-control">
                                 </select>
+                                <p>Pilih Gambar lagi untuk ganti</p>
+                                <img src="{{ asset('room/' . $outlet->roompic) }}" alt="Outlet Image" width="100">
+                   
                             </div>
                             
         
@@ -218,7 +229,7 @@
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label for="name" class="control-label">Harga</label>
-                                <input type="number" name="harga" id="harga" class="form-control">
+                                <input type="number" name="harga" id="harga" class="form-control" value="{{ $outlet->harga  }}">
                             </div>
                         </div>
 
@@ -271,6 +282,35 @@
     integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
     crossorigin=""></script>
 <script>
+
+const priceRangeSlider = document.getElementById('priceRangeSlider');
+const priceRangeInput = document.getElementById('priceRangeInput');
+const minPriceInput = document.getElementById('minPrice');
+const maxPriceInput = document.getElementById('maxPrice');
+
+if (priceRangeSlider && priceRangeInput && minPriceInput && maxPriceInput) {
+    // Initialize the slider with the harga_range value
+    const hargaRange = parseInt("{{ $outlet->harga_range }}");
+    priceRangeSlider.value = hargaRange;
+
+    // Set the initial values
+    priceRangeInput.value = hargaRange;
+    minPriceInput.value = 100000;
+    maxPriceInput.value = hargaRange;
+
+    // Add event listener
+    priceRangeSlider.addEventListener('input', updatePriceRange);
+}
+
+function updatePriceRange() {
+    const selectedValue = priceRangeSlider.value;
+    priceRangeInput.value = selectedValue;
+
+    // Update minPrice and maxPrice inputs if they exist
+    minPriceInput.value = 100000;
+    maxPriceInput.value = selectedValue;
+}
+
     var mapCenter = [{{ $outlet->latitude }}, {{ $outlet->longitude }}];
     var map = L.map('mapid').setView(mapCenter, {{ config('leaflet.detail_zoom_level') }});
 
@@ -300,5 +340,164 @@
     }
     $('#latitude').on('input', updateMarkerByInputs);
     $('#longitude').on('input', updateMarkerByInputs);
+
+
+    $(document).ready(function() {
+        getProvinsi();
+
+        
+           
+        });
+
+        function getProvinsi(){
+            var apiUrl = "{{ route('get-provinsi') }}";
+            $.ajax({
+                url: apiUrl,
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    // Handle the successful response
+                    
+
+                    // Display the data in the container
+                    // Update your view with the received data, for example:
+                    var select = $('#provinsi_id');
+                    select.empty(); // Clear previous options
+                    select.append('<option value="">.:PILIH:.</option>');
+                    // Assuming the array is nested under the key 'response'
+                    $.each(response, function(key, value) {
+                        select.append('<option value="' + value.id + '">' + value.provinsi + '</option>');
+                    });
+
+                    var selectedProvinsi = '{{ $outlet->provinsi_id }}';
+
+            // Set the selected Provinsi
+            $('#provinsi_id').val(selectedProvinsi);
+
+            // Trigger the change event to fetch and set the dependent options
+            $('#provinsi_id').trigger('change');
+
+                },
+                error: function(error) {
+                    // Handle the error
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        function pilihKabupaten(obj){
+            var provinsi_id = $(obj).val();
+            var apiUrl = "{{ route('get-kabupaten') }}";
+            $.ajax({
+                url: apiUrl,
+                method: 'GET',
+                data : {
+                    provinsi_id : provinsi_id
+                },
+                dataType: 'json',
+                success: function(response) {
+                    // Handle the successful response
+                    
+
+                    // Display the data in the container
+                    // Update your view with the received data, for example:
+                    var select = $('#kabupaten_id');
+                    select.empty(); // Clear previous options
+                    select.append('<option value="">.:Pilih Kabupaten:.</option>');
+                    // Assuming the array is nested under the key 'response'
+                    $.each(response, function(key, value) {
+                        select.append('<option value="' + value.id + '">' + value.value + '</option>');
+                    });
+
+                    var selectedKabupaten = '{{ $outlet->kabupaten_id }}'; // Example value, replace it with the actual selected value
+
+                    // Set the selected Kabupaten
+                    $('#kabupaten_id').val(selectedKabupaten);
+
+                    // Trigger the change event to fetch and set the dependent options
+                    $('#kabupaten_id').trigger('change');
+                },
+                error: function(error) {
+                    // Handle the error
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        function pilihKecamatan(obj){
+            var kabupaten_id = $(obj).val();
+            var apiUrl = "{{ route('get-kecamatan') }}";
+            $.ajax({
+                url: apiUrl,
+                method: 'GET',
+                data : {
+                    kabupaten_id : kabupaten_id
+                },
+                dataType: 'json',
+                success: function(response) {
+                    // Handle the successful response
+                    
+
+                    // Display the data in the container
+                    // Update your view with the received data, for example:
+                    var select = $('#kecamatan_id');
+                    select.empty(); // Clear previous options
+                    select.append('<option value="">.:Pilih Kecamatan:.</option>');
+                    // Assuming the array is nested under the key 'response'
+                    $.each(response, function(key, value) {
+                        select.append('<option value="' + value.id + '">' + value.value + '</option>');
+                    });
+
+                    var selectedKecamatan = '{{ $outlet->kecamatan_id }}'; // Example value, replace it with the actual selected value
+
+                        // Set the selected Kecamatan
+                        $('#kecamatan_id').val(selectedKecamatan);
+
+                        // Trigger the change event to fetch and set the dependent options
+                        $('#kecamatan_id').trigger('change');
+                },
+                error: function(error) {
+                    // Handle the error
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        function pilihDesa(obj){
+            var kecamatan_id = $(obj).val();
+            var apiUrl = "{{ route('get-desa') }}";
+            $.ajax({
+                url: apiUrl,
+                method: 'GET',
+                data : {
+                    kecamatan_id : kecamatan_id
+                },
+                dataType: 'json',
+                success: function(response) {
+                    // Handle the successful response
+                    
+
+                    // Display the data in the container
+                    // Update your view with the received data, for example:
+                    var select = $('#kelurahan_id');
+                    select.empty(); // Clear previous options
+                    select.append('<option value="">.:Pilih Desa:.</option>');
+                    // Assuming the array is nested under the key 'response'
+                    $.each(response, function(key, value) {
+                        select.append('<option value="' + value.id + '">' + value.value + '</option>');
+                    });
+
+                    var selectedKelurahan = '{{ $outlet->kelurahan_id }}';; // Example value, replace it with the actual selected value
+
+                    // Set the selected Kelurahan
+                    $('#kelurahan_id').val(selectedKelurahan);
+                },
+                error: function(error) {
+                    // Handle the error
+                    console.error('Error:', error);
+                }
+            });
+        }
+
 </script>
 @endpush

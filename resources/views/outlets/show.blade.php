@@ -14,6 +14,52 @@
                         <tr><td>Alamat</td><td>{{ $outlet->address }}</td></tr>
                         <tr><td>{{ __('outlet.latitude') }}</td><td>{{ $outlet->latitude }}</td></tr>
                         <tr><td>{{ __('outlet.longitude') }}</td><td>{{ $outlet->longitude }}</td></tr>
+                        <tr><td>Price Range</td><td>{{ $outlet->harga_range }}</td></tr>
+                        <tr><td>Gambar Villa</td><td>                            <img src="{{ asset('villa/' . $outlet->gambar) }}" alt="Outlet Image" width="100"></td></tr>
+                        <tr><td>Categori</td><td>
+                            @php
+                                 $categori = explode(',', $outlet->categori);
+
+                            @endphp
+                                @foreach ($categori as $item)
+                                    <li>{{ $item }}</li>
+                                @endforeach
+                            </td>
+                        
+                        </tr>
+                        <tr><td>Deskripsi</td><td>{{ $outlet->deskripsi }}</td></tr>
+
+                        <tr><td>House Rules</td><td>
+                            @php
+                                 $rules = explode(',', $outlet->rules);
+
+                            @endphp
+                                @foreach ($rules as $item)
+                                    <li>{{ $item }}</li>
+                                @endforeach
+                            </td>
+                        
+                        </tr>
+
+                        <tr><td>Fasilitas</td><td>
+                            @php
+                                 $fasilitas = explode(',', $outlet->fasilitas);
+
+                            @endphp
+                                @foreach ($fasilitas as $item)
+                                    <li>{{ $item }}</li>
+                                @endforeach
+                            </td>
+                        
+                        </tr>
+
+                        <tr><td>Room Name</td><td>{{ $outlet->room }}</td></tr>
+                        <tr><td>Bed</td><td>{{ $outlet->bed }}</td></tr>
+                        <tr><td>Bathroom</td><td>{{ $outlet->bathroom }}</td></tr>
+                        <tr><td>Gambar Room</td><td>                            <img src="{{ asset('room/' . $outlet->roompic) }}" alt="Outlet Image" width="100"></td></tr>
+
+                        <tr><td>Harga</td><td>{{ $outlet->harga }}</td></tr>
+
                     </tbody>
                 </table>
             </div>

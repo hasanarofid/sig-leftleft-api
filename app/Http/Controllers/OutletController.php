@@ -122,6 +122,7 @@ class OutletController extends Controller
      */
     public function update(Request $request, Outlet $outlet)
     {
+        // dd($request);
         $this->authorize('update', $outlet);
 
         $outletData = $request->validate([
@@ -130,19 +131,33 @@ class OutletController extends Controller
             'latitude'  => 'nullable|required_with:longitude|max:15',
             'longitude' => 'nullable|required_with:latitude|max:15',
         ]);
-        $newOutlet['creator_id'] = auth()->id();
-        $newOutlet['provinsi_id'] = $request->provinsi_id;
-        $newOutlet['kabupaten_id'] = $request->kabupaten_id;
-        $newOutlet['kecamatan_id'] = $request->kecamatan_id;
-        $newOutlet['kelurahan_id'] = $request->kelurahan_id;
-        $newOutlet['deskripsi'] = $request->deskripsi;
-        $newOutlet['harga'] = $request->harga;
+        $outletData['creator_id'] = auth()->id();
+        $outletData['provinsi_id'] = $request->provinsi_id;
+        $outletData['kabupaten_id'] = $request->kabupaten_id;
+        $outletData['kecamatan_id'] = $request->kecamatan_id;
+        $outletData['kelurahan_id'] = $request->kelurahan_id;
+        $outletData['deskripsi'] = $request->deskripsi;
+        $outletData['harga'] = $request->harga;
+        $outletData['room'] = $request->room;
+        $outletData['harga_range'] = $request->maxPrice;
+        
+        $outletData['bed'] = $request->bed;
+        $outletData['bathroom'] = $request->bathroom;
+        $outletData['categori'] =implode(',', $request->input('categori', []));
+        $outletData['rules'] =implode(',', $request->input('rules', []));
+        $outletData['fasilitas'] =implode(',', $request->input('fasilitas', []));
 
+        // dd($outletData);
         if(!empty($request->gambar)){
-            $imageName = time().'.'.$request->gambar->extension();
-            $request->gambar->move(public_path('toko'), $imageName);
-            $newOutlet['gambar'] = $imageName;
-    
+        $imageName = time().'.'.$request->gambar->extension();
+        $request->gambar->move(public_path('villa'), $imageName);
+        $outletData['gambar'] = $imageName;
+        }
+
+        if(!empty($request->roompic)){
+            $imageNamepic = time().'.'.$request->roompic->extension();
+            $request->roompic->move(public_path('room'), $imageNamepic);
+            $outletData['roompic'] = $imageNamepic;
         }
 
         $outlet->update($outletData);
