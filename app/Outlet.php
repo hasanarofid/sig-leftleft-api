@@ -14,7 +14,8 @@ class Outlet extends Model
      */
     protected $fillable = [
         'name', 'address', 'latitude', 'longitude', 'creator_id','gambar','harga',
-        'deskripsi','provinsi_id','kabupaten_id','kecamatan_id','kelurahan_id'
+        'deskripsi','provinsi_id','kabupaten_id','kecamatan_id','kelurahan_id',
+        'categori','rules','fasilitas','room','bed','roompic','harga_range','bathroom'
     ];
 
     /**

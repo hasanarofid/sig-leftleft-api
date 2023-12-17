@@ -43,6 +43,7 @@ class OutletController extends Controller
      */
     public function store(Request $request)
     {
+        
         $this->authorize('create', new Outlet);
 
         $newOutlet = $request->validate([
@@ -58,11 +59,29 @@ class OutletController extends Controller
         $newOutlet['kelurahan_id'] = $request->kelurahan_id;
         $newOutlet['deskripsi'] = $request->deskripsi;
         $newOutlet['harga'] = $request->harga;
+        $newOutlet['room'] = $request->room;
+        $newOutlet['harga_range'] = $request->maxPrice;
+        
+        $newOutlet['bed'] = $request->bed;
+        $newOutlet['bathroom'] = $request->bathroom;
+        $newOutlet['categori'] =implode(',', $request->input('categori', []));
+        $newOutlet['rules'] =implode(',', $request->input('rules', []));
+        $newOutlet['fasilitas'] =implode(',', $request->input('fasilitas', []));
 
-        $imageName = time().'.'.$request->gambar->extension();
-        $request->gambar->move(public_path('toko'), $imageName);
-        $newOutlet['gambar'] = $imageName;
         // dd($newOutlet);
+        if(!empty($request->gambar)){
+        $imageName = time().'.'.$request->gambar->extension();
+        $request->gambar->move(public_path('villa'), $imageName);
+        $newOutlet['gambar'] = $imageName;
+        }
+
+        if(!empty($request->roompic)){
+            $imageNamepic = time().'.'.$request->roompic->extension();
+            $request->roompic->move(public_path('room'), $imageNamepic);
+            $newOutlet['roompic'] = $imageNamepic;
+        }
+
+        
 
         $outlet = Outlet::create($newOutlet);
 

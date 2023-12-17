@@ -11,15 +11,11 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="name" class="control-label">Nama Toko</label>
+                        <label for="name" class="control-label">Nama Villa</label>
                         <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required>
                         {!! $errors->first('name', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                     </div>
-                    <div class="form-group">
-                        <label for="deskripsi" class="control-label">Deskripsi</label>
-                        <textarea id="deskripsi" class="form-control{{ $errors->has('deskripsi') ? ' is-invalid' : '' }}" name="deskripsi" rows="4">{{ old('deskripsi') }}</textarea>
-                        {!! $errors->first('deskripsi', '<span class="invalid-feedback" role="alert">:message</span>') !!}
-                    </div>
+                    
 
                         <div class="row">
                             <div class="col-md-3">
@@ -73,13 +69,117 @@
                         {!! $errors->first('address', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                     </div>
 
+                    <div class="form-group">
+                        <label for="deskripsi" class="control-label">Price Range</label>
+                        <input type="text" id="priceRangeInput" class="form-control" readonly>
+                        <input type="hidden" id="minPrice" name="minPrice">
+                        <input type="hidden" id="maxPrice" name="maxPrice">
+                    
+                        <input type="range" class="form-range" id="priceRangeSlider" min="100000" max="10000000">
+                    
+                    </div>
+
+
+
+                        <div class="form-group">
+                            <label for="name" class="control-label">Gambar Villa</label>
+                            <input type="file" name="gambar" id="gambar" class="form-control">
+                            </select>
+                        </div>
+                        
+    
+
+                    <div class="form-group">
+                        <label for="deskripsi" class="control-label">Categori</label>
+                        @php
+                            $categori = ['Farm','Beachfront','Mansions','Tiny House','Luxes','Amazing Views','Natural','Tropis'];
+                        @endphp
+
+                        @foreach($categori as $key => $category)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="category{{ $key }}" name="categori[]" value="{{ $category }}">
+                            <label class="form-check-label" for="category{{ $key }}">{{ $category }}</label>
+                        </div>
+                        @endforeach
+
+                    </div>
+
+                    
+                    <div class="form-group">
+                        <label for="deskripsi" class="control-label">Deskripsi</label>
+                        <textarea id="deskripsi" class="form-control{{ $errors->has('deskripsi') ? ' is-invalid' : '' }}" name="deskripsi" rows="4">{{ old('deskripsi') }}</textarea>
+                        {!! $errors->first('deskripsi', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deskripsi" class="control-label">House Rules</label>
+                        @php
+                            $rules = ['Gatherings allowed','Smoking allowed','Pets allowed',
+                                        'Suitable for infants (under 2 years)',
+                                        'Children friendly home (2-12 years)'
+                                    ];
+                        @endphp
+
+                        @foreach($rules as $key => $rule)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rule{{ $key }}" name="rules[]" value="{{ $rule }}">
+                            <label class="form-check-label" for="rule{{ $key }}">{{ $rule }}</label>
+                        </div>
+                        @endforeach
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deskripsi" class="control-label">Fasilitas</label>
+                        @php
+                            $fasilitass = ['TV','Parking','Fan','Swimming Pool','Wi-fi'
+                                    ];
+                        @endphp
+
+                        @foreach($fasilitass as $key => $fasilitas)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="fasilitas{{ $key }}" name="fasilitas[]" value="{{ $fasilitas }}">
+                            <label class="form-check-label" for="fasilitas{{ $key }}">{{ $fasilitas }}</label>
+                        </div>
+                        @endforeach
+
+                    </div>
+                    <h5>Room Information</h5>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="name" class="control-label">Room Name</label>
+                                <input type="tex" name="room" id="room" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name" class="control-label">Bed</label>
+                                <input type="tex" name="bed" id="bed" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name" class="control-label">Bathroom</label>
+                                <input type="tex" name="bathroom" id="bathroom" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+
                  
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="name" class="control-label">Gambar</label>
-                                <input type="file" name="gambar" id="gambar" class="form-control">
+                                <label for="name" class="control-label">Gambar Room</label>
+                                <input type="file" name="roompic" id="roompic" class="form-control">
                                 </select>
                             </div>
                             
@@ -115,7 +215,7 @@
                     <div id="mapid"></div>
                 </div>
                 <div class="card-footer">
-                    <input type="submit" value="{{ __('outlet.create') }}" class="btn btn-success">
+                    <input type="submit" value="Simpan" class="btn btn-success">
                     <a href="{{ route('outlets.index') }}" class="btn btn-link">{{ __('app.cancel') }}</a>
                 </div>
             </form>
@@ -139,6 +239,29 @@
     integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
     crossorigin=""></script>
 <script>
+const priceRangeSlider = document.getElementById('priceRangeSlider');
+const priceRangeInput = document.getElementById('priceRangeInput');
+const minPriceInput = document.getElementById('minPrice');
+const maxPriceInput = document.getElementById('maxPrice');
+
+if (priceRangeSlider && priceRangeInput && minPriceInput && maxPriceInput) {
+  priceRangeSlider.addEventListener('input', updatePriceRange);
+}
+
+function updatePriceRange() {
+  const selectedValue = priceRangeSlider.value;
+  priceRangeInput.value = selectedValue;
+
+  // Split the range value into min and max
+  const [minValue, maxValue] = selectedValue.split(',');
+
+  // Update minPrice and maxPrice inputs if they exist
+    minPriceInput.value = 100000;
+
+    maxPriceInput.value = minValue;
+
+}
+
     var mapCenter = [{{ request('latitude', config('leaflet.map_center_latitude')) }}, {{ request('longitude', config('leaflet.map_center_longitude')) }}];
     var map = L.map('mapid').setView(mapCenter, {{ config('leaflet.zoom_level') }});
 

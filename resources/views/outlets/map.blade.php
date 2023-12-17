@@ -10,14 +10,14 @@
 <br>
 <div class="row">
         <div class="col-md-12 text-center mb-4">
-            <h4>List Toko</h4>
+            <h4>List Villa</h4>
         </div>
     </div>
 <div class="row">
     @foreach($list as $outlet)
         <div class="col-md-4 mb-4">
             <div class="card">
-                <img src="{{ asset('toko/') . '/' . $outlet->gambar }}" class="card-img-top" alt="Outlet Image">
+                <img src="{{ asset('villa/') . '/' . $outlet->gambar }}" class="card-img-top" alt="Outlet Image">
                 <div class="card-body">
                     <h5 class="card-title">{{ $outlet->name }}</h5>
                     <p class="card-text">{{ $outlet->address }}</p>
@@ -65,7 +65,7 @@
                 // Build the popup content, including the image
                 var popupContent = '<strong>' + properties.name + '</strong><br>' +
                     properties.address + '<br>' +
-                    '<img src="{{ asset('toko/') }}/' + properties.gambar + '" alt="Outlet Image" width="100">';
+                    '<img src="{{ asset('villa/') }}/' + properties.gambar + '" alt="Outlet Image" width="100">';
 
                 // Create the marker with the popup
                 return L.marker(latlng).bindPopup(popupContent);

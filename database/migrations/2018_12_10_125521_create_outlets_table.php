@@ -19,6 +19,14 @@ class CreateOutletsTable extends Migration
             $table->string('address')->nullable();
             $table->string('gambar')->nullable();
             $table->string('harga')->nullable();
+            $table->string('harga_range')->nullable();
+            $table->string('categori')->nullable();
+            $table->string('rules')->nullable();
+            $table->string('fasilitas')->nullable();
+            $table->string('room')->nullable();
+            $table->string('bed')->nullable();
+            $table->string('bathroom')->nullable();
+            $table->string('roompic')->nullable();
             $table->string('deskripsi')->nullable();
             $table->integer('provinsi_id')->nullable(); 
             $table->integer('kabupaten_id')->nullable(); 

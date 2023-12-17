@@ -39,29 +39,175 @@
                 {{ csrf_field() }} {{ method_field('patch') }}
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="name" class="control-label">{{ __('outlet.name') }}</label>
-                        <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name', $outlet->name) }}" required>
+                        <label for="name" class="control-label">Nama Villa</label>
+                        <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ $outlet->name }}" required>
                         {!! $errors->first('name', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                     </div>
+                    
+
+                        <div class="row" style="display: none">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="name" class="control-label">Provinsi</label>
+                                    <select name="provinsi_id" id="provinsi_id" class="form-control" onchange="pilihKabupaten(this)">
+                                    </select>
+                                </div>
+                                
+            
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="name" class="control-label">Kabupaten</label>
+                                    <select name="kabupaten_id" id="kabupaten_id" class="form-control" onchange="pilihKecamatan(this)">
+            
+                                    </select>
+                                </div>
+                                
+            
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="name" class="control-label">Kecamatan</label>
+                                    <select name="kecamatan_id" id="kecamatan_id" class="form-control" onchange="pilihDesa(this)">
+            
+                                    </select>
+                                </div>
+                                
+            
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="name" class="control-label">Desa</label>
+                                    <select name="kelurahan_id" id="kelurahan_id" class="form-control" >
+            
+                                    </select>
+                                </div>
+                                
+            
+                            </div>
+                        </div>
+
+
                     <div class="form-group">
-                        <label for="deskripsi" class="control-label">Deskripsi</label>
-                        <textarea id="deskripsi" class="form-control{{ $errors->has('deskripsi') ? ' is-invalid' : '' }}" name="deskripsi" rows="4">{{ old('deskripsi',$outlet->deskripsi) }}</textarea>
-                        {!! $errors->first('deskripsi', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                        <label for="address" class="control-label">Alamat</label>
+                        <textarea id="address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" rows="4">{{ $outlet->address }}</textarea>
+                        {!! $errors->first('address', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deskripsi" class="control-label">Price Range</label>
+                        <input value="{{ $outlet->maxPrice }}" type="text" id="priceRangeInput" class="form-control" readonly>
+                        <input type="hidden" id="minPrice" name="minPrice" value="100000">
+                        <input type="hidden" id="maxPrice" name="maxPrice" value="{{ $outlet->maxPrice }}">
+                    
+                        <input type="range" class="form-range" id="priceRangeSlider" min="100000" max="10000000">
+                    
+                    </div>
+
+
+
+                        <div class="form-group">
+                            <label for="name" class="control-label">Gambar Villa</label>
+                            <input type="file" name="gambar" id="gambar" class="form-control">
+                            </select>
+                        </div>
+                        
+    
+
+                    <div class="form-group">
+                        <label for="deskripsi" class="control-label">Categori</label>
+                        @php
+                            $categori = ['Farm','Beachfront','Mansions','Tiny House','Luxes','Amazing Views','Natural','Tropis'];
+                        @endphp
+
+                        @foreach($categori as $key => $category)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="category{{ $key }}" name="categori[]" value="{{ $category }}">
+                            <label class="form-check-label" for="category{{ $key }}">{{ $category }}</label>
+                        </div>
+                        @endforeach
+
                     </div>
 
                     
+                    <div class="form-group">
+                        <label for="deskripsi" class="control-label">Deskripsi</label>
+                        <textarea id="deskripsi" class="form-control{{ $errors->has('deskripsi') ? ' is-invalid' : '' }}" name="deskripsi" rows="4">{{ old('deskripsi') }}</textarea>
+                        {!! $errors->first('deskripsi', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
 
                     <div class="form-group">
-                        <label for="address" class="control-label">{{ __('outlet.address') }}</label>
-                        <textarea id="address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" rows="4">{{ old('address', $outlet->address) }}</textarea>
-                        {!! $errors->first('address', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                        <label for="deskripsi" class="control-label">House Rules</label>
+                        @php
+                            $rules = ['Gatherings allowed','Smoking allowed','Pets allowed',
+                                        'Suitable for infants (under 2 years)',
+                                        'Children friendly home (2-12 years)'
+                                    ];
+                        @endphp
+
+                        @foreach($rules as $key => $rule)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rule{{ $key }}" name="rules[]" value="{{ $rule }}">
+                            <label class="form-check-label" for="rule{{ $key }}">{{ $rule }}</label>
+                        </div>
+                        @endforeach
+
                     </div>
+
+                    <div class="form-group">
+                        <label for="deskripsi" class="control-label">Fasilitas</label>
+                        @php
+                            $fasilitass = ['TV','Parking','Fan','Swimming Pool','Wi-fi'
+                                    ];
+                        @endphp
+
+                        @foreach($fasilitass as $key => $fasilitas)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="fasilitas{{ $key }}" name="fasilitas[]" value="{{ $fasilitas }}">
+                            <label class="form-check-label" for="fasilitas{{ $key }}">{{ $fasilitas }}</label>
+                        </div>
+                        @endforeach
+
+                    </div>
+                    <h5>Room Information</h5>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="name" class="control-label">Room Name</label>
+                                <input type="tex" name="room" id="room" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name" class="control-label">Bed</label>
+                                <input type="tex" name="bed" id="bed" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name" class="control-label">Bathroom</label>
+                                <input type="tex" name="bathroom" id="bathroom" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                 
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="name" class="control-label">Gambar</label>
-                                <input type="file" name="gambar" id="gambar" class="form-control">
+                                <label for="name" class="control-label">Gambar Room</label>
+                                <input type="file" name="roompic" id="roompic" class="form-control">
                                 </select>
                             </div>
                             
@@ -72,7 +218,7 @@
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label for="name" class="control-label">Harga</label>
-                                <input value="{{ $outlet->harga }}" type="number" name="harga" id="harga" class="form-control">
+                                <input type="number" name="harga" id="harga" class="form-control">
                             </div>
                         </div>
 
